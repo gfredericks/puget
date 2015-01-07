@@ -9,10 +9,14 @@
 
 ;; TAGGED VALUE PROTOCOL
 
-(defprotocol TaggedValue
-  (edn-tag [this] "Return the EDN tag symbol for this data type.")
-  (edn-value [this] "Return the EDN value to follow the tag."))
+(defmulti -tagged-value
+  "Returns a pair [tag-symbol value]."
+  type)
+(defn tagged-value? [x]
+  (boolean (get-method -tagged-value (type x))))
 
+(defn edn-tag [x] ((-tagged-value x) 0))
+(defn edn-value [x] ((-tagged-value x) 1))
 
 (defn edn-str
   "Converts the given TaggedValue data to a tagged EDN string."
@@ -41,11 +45,7 @@
   delegates to edn-str."
   [t tag expr]
   `(let [value-fn# ~expr]
-     (extend-type ~t
-       TaggedValue
-       (edn-tag [this#] ~tag)
-       (edn-value [this#]
-         (value-fn# this#)))
+     (defmethod -tagged-value ~t [this#] [~tag (value-fn# this#)])
      (defprint-method ~t)))
 
 
@@ -107,11 +107,11 @@
 
 ; #??? - default handling function
 (defrecord GenericTaggedValue
-  [tag value]
+  [tag value])
 
-  TaggedValue
-  (edn-tag [this] tag)
-  (edn-value [this] value))
+(defmethod -tagged-value GenericTaggedValue
+  [x]
+  [(:tag x) (:value x)])
 
 
 (defprint-method GenericTaggedValue)

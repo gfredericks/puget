@@ -143,7 +143,7 @@
 
 (defn- canonize-dispatch
   [value]
-  (if (satisfies? data/TaggedValue value)
+  (if (data/tagged-value? value)
     :tagged-value
     (class value)))
 
@@ -228,7 +228,7 @@
           [:span
            (canonize k)
            (cond
-             (satisfies? data/TaggedValue v) " "
+             (data/tagged-value? v) " "
              (coll? v) (:map-coll-separator *options*)
              :else " ")
            (canonize v)])

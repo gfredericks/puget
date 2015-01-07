@@ -3,7 +3,7 @@
     [clojure.string :as str]
     [clojure.test :refer :all]
     (puget
-      [data :refer [TaggedValue]]
+      [data :as data]
       [printer :refer :all])))
 
 
@@ -70,9 +70,9 @@
       (should-fail-when-strict v)
       (is (= "#\"\\d+\"" (pprint-str v)))))
   (testing "vars"
-    (let [v #'TaggedValue]
+    (let [v #'first]
       (should-fail-when-strict v)
-      (is (= "#'puget.data/TaggedValue"
+      (is (= "#'clojure.core/first"
              (pprint-str v)))))
   (testing "atom"
     (let [v (atom :foo)]
@@ -91,11 +91,13 @@
       (is (= :done @v))
       (is (re-seq #"#<Future@[0-9a-f]+ :done>" (pprint-str v))))))
 
+(defmethod data/-tagged-value ::one-off
+  [x]
+  x)
+(defn one-off [t v] (with-meta [t v] {:type ::one-off}))
 
 (deftest canonical-tagged-value
-  (let [tval (reify TaggedValue
-               (edn-tag [this] 'foo)
-               (edn-value [this] :bar/baz))
+  (let [tval (one-off 'foo :bar/baz)
         doc (canonize tval)]))
 
 
