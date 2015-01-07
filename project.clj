@@ -1,4 +1,4 @@
-(defproject com.gfredericks.forks.mvxcvi/puget "0.6.3.1-SNAPSHOT"
+(defproject com.gfredericks.forks.mvxcvi/puget "0.6.3.1"
   :description "Colorizing canonical Clojure printer for EDN values."
   :url "https://github.com/greglook/puget"
   :license {:name "Public Domain"
