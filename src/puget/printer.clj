@@ -4,6 +4,7 @@
     [clojure.string :as str]
     [fipp.printer :as fipp]
     (puget
+      [class-lookup :as class-lookup]
       [color :as color]
       [data :as data]
       [order :as order])
@@ -87,6 +88,7 @@
    :map-coll-separator " "
    :escape-types nil
    :print-fallback nil
+   :class-lookup nil
    :print-meta nil
    :print-color false
    :color-markup :ansi
@@ -109,6 +111,14 @@
     :class-delimiter [:blue]
     :class-name      [:bold :blue]}})
 
+(defn add-class-lookup-cache
+  [opts]
+  (if-let [class-lookup (:class-lookup opts)]
+    (assoc opts :cached-class-lookup (memoize
+                                      (fn [the-class]
+                                        (class-lookup/lookup-impl class-lookup
+                                                                  the-class))))
+    opts))
 
 (defn merge-options
   "Merges maps of printer options, taking care to combine the color scheme
@@ -122,7 +132,7 @@
   "Executes the given expressions with a set of options merged into the current
   option map."
   [opts & body]
-  `(binding [*options* (merge-options *options* ~opts)]
+  `(binding [*options* (add-class-lookup-cache (merge-options *options* ~opts))]
      ~@body))
 
 
@@ -192,10 +202,15 @@
   notation are rendered as tagged literals; others are dispatched on their
   `type`."
   [value]
-  (let [class-sym (some-> value class .getName symbol)]
+  (let [the-class (class value)
+        class-sym (some-> the-class .getName symbol)]
     (cond
       (contains? (:escape-types *options*) class-sym)
         :default
+
+      (let [f (:cached-class-lookup *options*)]
+        (and f (f the-class)))
+        ::class-lookup-tagged-literal
 
       (satisfies? data/ExtendedNotation value)
         ::tagged-literal
@@ -401,6 +416,14 @@
 (defmethod format-doc ::tagged-literal
   [value]
   (let [{:keys [tag form]} (data/->edn value)]
+    [:span
+     (color-doc :tag (str \# tag))
+     (if (coll? form) :line " ")
+     (format-doc form)]))
+
+(defmethod format-doc ::class-lookup-tagged-literal
+  [value]
+  (let [{:keys [tag form]} (((:cached-class-lookup *options*) (class value)) value)]
     [:span
      (color-doc :tag (str \# tag))
      (if (coll? form) :line " ")
