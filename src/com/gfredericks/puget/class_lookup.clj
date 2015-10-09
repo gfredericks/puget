@@ -1,4 +1,4 @@
-(ns puget.class-lookup
+(ns com.gfredericks.puget.class-lookup
   "Class-based lookup, algorithm based on
   https://github.com/Datomic/fressian/blob/32a833ba5adce9cd14365ff64b8b42a8569b7916/src/org/fressian/impl/InheritanceLookup.java")
 

@@ -1,4 +1,4 @@
-(ns puget.order
+(ns com.gfredericks.puget.order
   "This namespace provides a total-ordering comparator for Clojure values.")
 
 

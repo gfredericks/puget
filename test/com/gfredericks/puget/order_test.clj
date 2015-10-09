@@ -1,7 +1,7 @@
-(ns puget.order-test
+(ns com.gfredericks.puget.order-test
   (:require
     [clojure.test :refer :all]
-    [puget.order :as order]))
+    [com.gfredericks.puget.order :as order]))
 
 
 (defn- is-sorted

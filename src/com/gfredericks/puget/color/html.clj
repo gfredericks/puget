@@ -1,9 +1,9 @@
-(ns puget.color.html
+(ns com.gfredericks.puget.color.html
   "This namespace defines methods for the `:html-inline` and `:html-classes`
   otptions for `:color-markup`."
   (:require
     [clojure.string :as str]
-    [puget.color :as color]))
+    [com.gfredericks.puget.color :as color]))
 
 
 (def style-attribute

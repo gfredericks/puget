@@ -1,14 +1,14 @@
-(ns puget.printer
+(ns com.gfredericks.puget.printer
   "Functions for canonical colored printing of EDN values."
   (:require
     [clojure.string :as str]
     [fipp.printer :as fipp]
-    (puget
+    (com.gfredericks.puget
       [class-lookup :as class-lookup]
       [color :as color]
       [data :as data]
       [order :as order])
-    (puget.color ansi html)))
+    (com.gfredericks.puget.color ansi html)))
 
 
 ;; ## Control Vars

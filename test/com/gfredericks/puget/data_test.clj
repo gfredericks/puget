@@ -1,8 +1,8 @@
-(ns puget.data-test
+(ns com.gfredericks.puget.data-test
   (:require
     [clojure.edn :as edn]
     [clojure.test :refer :all]
-    [puget.data :as data]))
+    [com.gfredericks.puget.data :as data]))
 
 
 (defn test-tagged-literal

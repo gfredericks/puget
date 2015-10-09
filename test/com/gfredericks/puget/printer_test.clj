@@ -1,8 +1,8 @@
-(ns puget.printer-test
+(ns com.gfredericks.puget.printer-test
   (:require
     [clojure.string :as str]
     [clojure.test :refer :all]
-    (puget
+    (com.gfredericks.puget
       [data :as data]
       [printer :refer :all])))
 
@@ -62,7 +62,7 @@
   (testing "Records"
     (let [r (->TestRecord \x \y)]
       (should-fail-when-strict r)
-      (is (= "#puget.printer_test.TestRecord{:bar \\y, :foo \\x}\n"
+      (is (= "#com.gfredericks.puget.printer_test.TestRecord{:bar \\y, :foo \\x}\n"
              (with-out-str (pprint r)))))))
 
 
@@ -86,7 +86,7 @@
   (testing "vars"
     (let [v #'*options*]
       (should-fail-when-strict v)
-      (is (= "#'puget.printer/*options*"
+      (is (= "#'com.gfredericks.puget.printer/*options*"
              (pprint-str v)))))
   (testing "atom"
     (let [v (atom :foo)]
@@ -107,17 +107,17 @@
   (testing "custom IDeref"
     (let [v (ADeref.)]
       (should-fail-when-strict v)
-      (is (re-seq #"#<puget.printer_test.ADeref@[0-9a-f]+ 123>"
+      (is (re-seq #"#<com.gfredericks.puget.printer_test.ADeref@[0-9a-f]+ 123>"
                   (pprint-str v)))))
   (testing "custom IPending, realized"
     (let [v (->APending true)]
       (should-fail-when-strict v)
-      (is (re-seq #"#<puget.printer_test.APending@[0-9a-f]+ 1"
+      (is (re-seq #"#<com.gfredericks.puget.printer_test.APending@[0-9a-f]+ 1"
                   (pprint-str v)))))
   (testing "custom IPending, not realized"
     (let [v (->APending false)]
       (should-fail-when-strict v)
-      (is (re-seq #"#<puget.printer_test.APending@[0-9a-f]+ pending"
+      (is (re-seq #"#<com.gfredericks.puget.printer_test.APending@[0-9a-f]+ pending"
                   (pprint-str v))))))
 
 
@@ -143,9 +143,9 @@
     (let [cv (ComplexValue.)]
       (with-options {:escape-types nil}
         (is (= "#complex/val \"to-string\"" (pprint-str cv))))
-      (with-options {:escape-types #{'puget.printer_test.ComplexValue}}
-        (is (re-seq #"#<puget\.printer_test\.ComplexValue@[0-9a-f]+ to-string>" (pprint-str cv))))
-      (with-options {:escape-types #{'puget.printer_test.ComplexValue}
+      (with-options {:escape-types #{'com.gfredericks.puget.printer_test.ComplexValue}}
+        (is (re-seq #"#<com.gfredericks.puget\.printer_test\.ComplexValue@[0-9a-f]+ to-string>" (pprint-str cv))))
+      (with-options {:escape-types #{'com.gfredericks.puget.printer_test.ComplexValue}
                      :print-fallback :print}
         (is (= "{{ complex value print }}" (pprint-str cv)))))))
 

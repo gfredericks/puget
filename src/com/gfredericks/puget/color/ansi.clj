@@ -1,8 +1,8 @@
-(ns puget.color.ansi
+(ns com.gfredericks.puget.color.ansi
   "This namespace defines functions to apply ANSI color codes to text."
   (:require
     [clojure.string :as str]
-    [puget.color :as color]))
+    [com.gfredericks.puget.color :as color]))
 
 
 (def sgr-code

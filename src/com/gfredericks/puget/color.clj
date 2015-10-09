@@ -1,4 +1,4 @@
-(ns puget.color
+(ns com.gfredericks.puget.color
   "This namespace defines multimethods to add color markup to text.")
 
 ;; ## Coloring Multimethods

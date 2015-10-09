@@ -1,4 +1,4 @@
-(ns puget.data
+(ns com.gfredericks.puget.data
   "Code to handle custom data represented as tagged EDN values."
   (:import
     (java.net URI)
