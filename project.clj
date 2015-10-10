@@ -4,7 +4,7 @@
   :license {:name "Public Domain"
             :url "http://unlicense.org/"}
 
-  :deploy-branches ["master"]
+  :deploy-repositories [["releases" :clojars]]
 
   :plugins [[lein-cloverage "1.0.2"]]
 
